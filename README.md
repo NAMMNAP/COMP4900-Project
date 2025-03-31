@@ -34,3 +34,15 @@ For the report generation we will need to generate a report based on the data co
 The report genration system is implemented here:
 
 something something something (**TODO**)
+
+## Communication Module
+
+This is just a module for the communication between the AUV and the sensor simulation. Like an API basically. (**TODO**)
+
+# File Structure
+
+src/ - contains all the source code for the project
+sensor_sim/ - contains the sensor simulation code
+communication_module/ - contains the communication module code
+report_generator/ - contains the report generation code
+AUV_sim/ - contains the AUV simulation code
