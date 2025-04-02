@@ -13,14 +13,12 @@ typedef enum {
 
 // example sensor data structures
 typedef struct {
-    SensorType type; // Type of sensor
     double depth;
     double temperature;
     double pressure;
 } SensorDataType1;
 
 typedef struct {
-    SensorType type; // Type of sensor
     double latitude;
     double longitude;
     double altitude;
