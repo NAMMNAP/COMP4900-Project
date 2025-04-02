@@ -1,7 +1,7 @@
 #ifndef SENSOR_MAP_H
 #define SENSOR_MAP_H
 
-#include "comm_module.h"       // For SensorType and AUVResponseThread, etc.
+#include "comm_module.h"       // For  size_t
 #include "sensor_data_types.h" // For SensorDataType1, SensorDataType2, etc.
 
 typedef struct {

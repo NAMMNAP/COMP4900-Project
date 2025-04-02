@@ -1,6 +1,7 @@
 #ifndef SENSOR_HANDLERS_H
 #define SENSOR_HANDLERS_H
 
+#include "comm_module.h"
 #include "sensor_data_types.h"
 #include "AUV_state.h"
 
@@ -13,7 +14,7 @@ typedef struct {
     SensorHandler   handler;            // function pointer to process the data
 } ChannelContextThread;
 
-ChannelContextThread *get_sensor_contexts(void);
+ChannelContextThread *get_sensor_contexts(int num_sensors);
 
 // Handler function for SENSOR_TYPE_1
 void handle_sensor_1(const SensorDataType1 *data, AuvState *global_state);

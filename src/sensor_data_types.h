@@ -5,6 +5,7 @@
  * Sensor Data Types Definitions
  *-----------------------------------------------------*/
 
+// the purpose of this enum is so that the server can know the data type
 typedef enum {
     SENSOR_TYPE_1,
     SENSOR_TYPE_2,

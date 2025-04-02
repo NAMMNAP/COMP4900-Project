@@ -1,6 +1,8 @@
 #include "AUV_server.h"
 
-void init_mutex(void)
+AuvState *global_state = NULL;
+
+int init_mutex(void)
 {
     // Initialize global state before creating threads.
     global_state = malloc(sizeof(AuvState));
@@ -15,12 +17,13 @@ void init_mutex(void)
         free(global_state);
         return -1;
     }
+    return 0;
 }
 
-void print_channel_startup(int sensor_id, int channel_id){
-    printf("[Sensor %d] Listening on channel %d...\n",
-            sensor_id, channel_id);
- }
+void print_channel_startup(int sensor_id, int channel_id)
+{
+    printf("[Sensor %d] Listening on channel %d...\n", sensor_id, channel_id);
+}
 
 /*-----------------------------------------------------
  * Thread function for each channel
@@ -29,8 +32,8 @@ void print_channel_startup(int sensor_id, int channel_id){
 static void* channel_thread(void *arg)
 {
     ChannelContextThread *ctx = (ChannelContextThread*)arg;
-
     print_channel_startup(ctx->sensor_id, ctx->attach->chid);
+
     while (1)
     {
         char msg_buffer[256];  // needs to be big enough for the sensor msg
@@ -72,7 +75,7 @@ static void* channel_thread(void *arg)
     }
 
     /* If we ever break from the loop, detach name. Not shown here. */
-    name_detach(attach, 0);
+    name_detach(ctx->attach, 0);
     free(ctx);
     return NULL;
 }
@@ -82,7 +85,9 @@ static void* channel_thread(void *arg)
  *-------------------------------------------------------*/
 int auv_server_start(void)
 {
-    init_mutex();
+    if (init_mutex() != 0) {
+        return -1; // mutex initialization failed
+    }
 
     ChannelContextThread *sensor_contexts = get_sensor_contexts(NUM_SENSORS);
     if (sensor_contexts == NULL) {
@@ -153,4 +158,5 @@ int handler_wrapper(ChannelContextThread *ctx, const void *data, size_t data_siz
     }
 
     pthread_mutex_unlock(&global_state->mutex);
+    return 0;
 }

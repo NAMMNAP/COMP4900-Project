@@ -21,13 +21,12 @@ int main(void) {
 
     /* Set up the header. */
     SensorMessageHeader header;
-    header.sensor_type = SENSOR_TYPE_1;  // Specify the sensor type.
+    header.sensor_type = SENSOR_TYPE_1;
     header.payload_size  = sizeof(SensorDataType1);
     memcpy(msg_buffer, &header, sizeof(header));
 
     /* Set up the sensor data for SENSOR_TYPE_1. */
     SensorDataType1 sensorMsg = {0};
-    sensorMsg.type        = SENSOR_TYPE_1;  // Optional: include type in sensor data.
     sensorMsg.depth       = 100.5;          /* Example depth */
     sensorMsg.temperature = 20.0;           /* Example temperature */
     sensorMsg.pressure    = 1013.25;        /* Example pressure */
@@ -38,8 +37,7 @@ int main(void) {
     memset(&auvResp, 0, sizeof(auvResp));
 
     /* 5. Send the message to the server and wait for a reply (blocking call). */
-    if (MsgSend(coid, msg_buffer, sizeof(msg_buffer),
-                &auvResp, sizeof(auvResp)) == -1) {
+    if (MsgSend(coid, msg_buffer, sizeof(msg_buffer), &auvResp, sizeof(auvResp)) == -1) {
         perror("MsgSend");
         name_close(coid);
         return EXIT_FAILURE;
