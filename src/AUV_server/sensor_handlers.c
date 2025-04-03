@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "sensor_handlers.h"
 
-// Note: You can either pass the global state as an argument or use an external/global instance.
+
 extern AuvState *global_state;
 
-void handle_sensor_1(const SensorDataType1 *data, AuvState *global_state)
+void handle_sensor_1(const SensorDataType1 *data)
 {
     global_state->depth       = data->depth;
     global_state->temperature = data->temperature;
@@ -14,7 +14,7 @@ void handle_sensor_1(const SensorDataType1 *data, AuvState *global_state)
            global_state->depth, global_state->temperature, global_state->pressure);
 }
 
-void handle_sensor_2(const SensorDataType2 *data, AuvState *global_state)
+void handle_sensor_2(const SensorDataType2 *data)
 {
     global_state->latitude  = data->latitude;
     global_state->longitude = data->longitude;

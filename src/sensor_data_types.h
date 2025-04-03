@@ -14,9 +14,9 @@ typedef enum {
 
 // example sensor data structures
 typedef struct {
-    double depth;
-    double temperature;
-    double pressure;
+    float depth;
+    float temperature;
+    float pressure;
 } SensorDataType1;
 
 typedef struct {

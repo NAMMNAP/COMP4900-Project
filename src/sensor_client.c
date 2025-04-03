@@ -26,10 +26,13 @@ int main(void) {
     memcpy(msg_buffer, &header, sizeof(header));
 
     /* Set up the sensor data for SENSOR_TYPE_1. */
-    SensorDataType1 sensorMsg = {0};
-    sensorMsg.depth       = 100.5;          /* Example depth */
-    sensorMsg.temperature = 20.0;           /* Example temperature */
-    sensorMsg.pressure    = 1013.25;        /* Example pressure */
+
+    SensorDataType1 sensorMsg = {
+        .depth       = 0.0f,
+        .temperature = 0.0f,
+        .pressure    = 0.0f
+    };
+
     memcpy(msg_buffer + sizeof(header), &sensorMsg, sizeof(sensorMsg));
 
     /* 4. Prepare a place to receive the server response. */

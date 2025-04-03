@@ -4,13 +4,13 @@
 #include "comm_module.h"
 
 typedef struct {
-    double depth;
-    double temperature;
-    double pressure;
+    float depth;
+    float temperature;
+    float pressure;
 
-    double latitude;
-    double longitude;
-    double altitude;
+    float latitude;
+    float longitude;
+    float altitude;
 
     // Mutex to synchronize access if multiple threads modify this.
     pthread_mutex_t mutex;

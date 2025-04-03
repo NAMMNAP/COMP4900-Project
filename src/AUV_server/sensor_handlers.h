@@ -17,9 +17,9 @@ typedef struct {
 ChannelContextThread *get_sensor_contexts(int num_sensors);
 
 // Handler function for SENSOR_TYPE_1
-void handle_sensor_1(const SensorDataType1 *data, AuvState *global_state);
+void handle_sensor_1(const SensorDataType1 *data);
 
 // Handler function for SENSOR_TYPE_2
-void handle_sensor_2(const SensorDataType2 *data, AuvState *global_state);
+void handle_sensor_2(const SensorDataType2 *data);
 
 #endif // SENSOR_HANDLERS_H

@@ -1,7 +1,5 @@
 #include "AUV_server.h"
 
-AuvState *global_state = NULL;
-
 int init_mutex(void)
 {
     // Initialize global state before creating threads.
@@ -48,6 +46,7 @@ static void* channel_thread(void *arg)
             // A pulse – we’ll ignore in this example
             continue;
         }
+        printf("[Sensor %d] Received message on channel %d\n", ctx->sensor_id, ctx->attach->chid);
 
         AUVResponseThread response;
         memset(&response, 0, sizeof(response));
@@ -86,11 +85,13 @@ static void* channel_thread(void *arg)
 int auv_server_start(void)
 {
     if (init_mutex() != 0) {
+        printf("Failed to initialize mutex\n");
         return -1; // mutex initialization failed
     }
 
     ChannelContextThread *sensor_contexts = get_sensor_contexts(NUM_SENSORS);
     if (sensor_contexts == NULL) {
+        printf("Failed to get sensor contexts\n");
         return -1; // malloc failure already reported in get_sensor_contexts
     }
 
@@ -106,22 +107,21 @@ int auv_server_start(void)
         if (attach == NULL) {
             perror("name_attach");
             free(sensor_contexts);
+            printf("Failed to attach name for sensor %d\n", sensor_contexts[i].sensor_id);
             return -1;
         }
 
         // Assign the attach pointer to the context
         sensor_contexts[i].attach = attach;
 
+
         /* Launch the channel's thread */
         if (pthread_create(&threads[i], NULL, channel_thread, (void *)&sensor_contexts[i]) != 0) {
             perror("pthread_create");
             free(sensor_contexts);
-            return EXIT_FAILURE;
+            printf("Failed to create thread for sensor %d\n", sensor_contexts[i].sensor_id);
+            return -1;
         }
-    }
-
-    for (int i = 0; i < NUM_SENSORS; i++) {
-        pthread_join(threads[i], NULL);
     }
 
     free(sensor_contexts);
@@ -130,6 +130,7 @@ int auv_server_start(void)
 
 int handler_wrapper(ChannelContextThread *ctx, const void *data, size_t data_size)
 {
+    print("[Sensor %d] Handler wrapper called.\n", ctx->sensor_id);
     // For example, update shared state before calling the handler.
     extern AuvState *global_state;
     pthread_mutex_lock(&global_state->mutex);
