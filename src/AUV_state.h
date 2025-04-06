@@ -8,9 +8,15 @@ typedef struct {
     float temperature;
     float pressure;
 
-    float latitude;
-    float longitude;
-    float altitude;
+    // Vector measurements
+    // x, y, z axis
+    float velocity[3];
+    float accel[3];
+    float angle[3]; // Yaw, pitch, roll
+
+    float x;
+    float y;
+    float z;
 
     // Mutex to synchronize access if multiple threads modify this.
     pthread_mutex_t mutex;

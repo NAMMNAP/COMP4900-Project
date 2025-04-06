@@ -1,7 +1,7 @@
 #ifndef AUV_SERVER_H
 #define AUV_SERVER_H
 
-#define NUM_SENSORS 2
+#define NUM_SENSORS 4
 
 #include "comm_module.h"
 #include "sensor_handlers.h"

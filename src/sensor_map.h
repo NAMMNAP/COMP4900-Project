@@ -11,7 +11,9 @@ typedef struct {
 
 static const SensorTypeMap sensor_type_map[] = {
     { SENSOR_TYPE_1, sizeof(SensorDataType1) },
-    { SENSOR_TYPE_2, sizeof(SensorDataType2) }
+    { SENSOR_TYPE_2, sizeof(SensorDataType2) },
+	{ SENSOR_TYPE_3, sizeof(SensorDataType3) },
+	{ SENSOR_TYPE_4, sizeof(SensorDataType4) }
 };
 
 #define NUM_SENSOR_TYPES (sizeof(sensor_type_map) / sizeof(sensor_type_map[0]))

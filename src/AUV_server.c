@@ -130,7 +130,7 @@ int auv_server_start(void)
 
 int handler_wrapper(ChannelContextThread *ctx, const void *data, size_t data_size)
 {
-    print("[Sensor %d] Handler wrapper called.\n", ctx->sensor_id);
+    printf("[Sensor %d] Handler wrapper called.\n", ctx->sensor_id);
     // For example, update shared state before calling the handler.
     extern AuvState *global_state;
     pthread_mutex_lock(&global_state->mutex);
