@@ -95,6 +95,13 @@ int auv_server_start(void)
         return -1; // malloc failure already reported in get_sensor_contexts
     }
 
+    // Create thread for INS algorithm
+    pthread_t ins_thread;
+    if (pthread_create(&ins_thread, NULL, (void*)&ins_caller, NULL) != 0) {
+    	perror("pthread_create");
+    	return -1;
+    }
+
     // Each sensor has its own thread
     pthread_t threads[NUM_SENSORS];
 

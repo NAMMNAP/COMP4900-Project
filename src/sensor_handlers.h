@@ -1,9 +1,12 @@
 #ifndef SENSOR_HANDLERS_H
 #define SENSOR_HANDLERS_H
 
+#include <time.h>
 #include "comm_module.h"
 #include "sensor_data_types.h"
 #include "AUV_state.h"
+
+#define INS_FREQUENCY	15
 
 typedef void (*SensorHandler)(const void *data);
 
@@ -16,7 +19,8 @@ typedef struct {
 
 ChannelContextThread *get_sensor_contexts(int num_sensors);
 
-void ins_algorithm();
+void ins_caller();
+void ins_algorithm(double delta_t);
 
 // Handler function for SENSOR_TYPE_1
 void handle_sensor_1(const SensorDataType1 *data);

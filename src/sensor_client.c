@@ -1,57 +1,49 @@
+#include <time.h>
 #include "comm_module.h"
 #include "AUV_server.h"
 
 int send_msg(int coid, int iSensorType, void* pSensorData, size_t uSensorDataSize);
+void sensor_wrapper_one();
+void sensor_wrapper_two();
+void sensor_wrapper_three();
+void sensor_wrapper_four();
+double add_noise(double min, double max);
 
 int main(void) {
+	// Seeding random
+	srand(time(NULL));
+
     /* 1. Spin up the server in background threads. */
     if (auv_server_start() != 0) {
         fprintf(stderr, "[Client] Failed to start AUV server!\n");
         return EXIT_FAILURE;
     }
 
-    /* 2. Open a connection to "SensorServer_X" (the channel for sensor type X). */
-	int coidOne   = name_open("SensorServer_1", 0);
-	int coidTwo   = name_open("SensorServer_2", 0);
-	int coidThree = name_open("SensorServer_3", 0);
-	int coidFour  = name_open("SensorServer_4", 0);
-	if (coidOne == -1) {
-		perror("name_open");
-		return EXIT_FAILURE;
+    // Set up client-side threads for sending messages per each sensor
+    // TODO: Can refactor this in some for loop.
+	pthread_t sensor_client_1;
+	pthread_t sensor_client_2;
+	pthread_t sensor_client_3;
+	pthread_t sensor_client_4;
+	if (pthread_create(&sensor_client_1, NULL, (void*)&sensor_wrapper_one, NULL) != 0) {
+		perror("pthread_create");
+		return -1;
 	}
-	if (coidTwo == -1) {
-		perror("name_open");
-		return EXIT_FAILURE;
+	if (pthread_create(&sensor_client_2, NULL, (void*)&sensor_wrapper_two, NULL) != 0) {
+		perror("pthread_create");
+		return -1;
 	}
-	if (coidThree == -1) {
-		perror("name_open");
-		return EXIT_FAILURE;
+	if (pthread_create(&sensor_client_3, NULL, (void*)&sensor_wrapper_three, NULL) != 0) {
+		perror("pthread_create");
+		return -1;
 	}
-	if (coidFour == -1) {
-		perror("name_open");
-		return EXIT_FAILURE;
+	if (pthread_create(&sensor_client_4, NULL, (void*)&sensor_wrapper_four, NULL) != 0) {
+		perror("pthread_create");
+		return -1;
 	}
 
-	// TODO: This only sends a message once, with all values set to zero.
-	//       Messages need to be sent continuously, with new readings from sensors.
-	//
-	//		 How to define the readings? We don't have a dataset, so through some random
-	//       number generation probably, though it must make sense.
-    SensorDataType1 sensorMsgOne = { 0 };
-    SensorDataType2 sensorMsgTwo = { 0 };
-    SensorDataType3 sensorMsgThree = { 0 };
-    SensorDataType3 sensorMsgFour = { 0 };
-    if (send_msg(coidOne, SENSOR_TYPE_1, (void*)(&sensorMsgOne), sizeof(SensorDataType1)) != EXIT_SUCCESS){
-    	return EXIT_FAILURE;
-    }
-    if (send_msg(coidTwo, SENSOR_TYPE_2, (void*)(&sensorMsgTwo), sizeof(SensorDataType2)) != EXIT_SUCCESS){
-    	return EXIT_FAILURE;
-    }
-    if (send_msg(coidThree, SENSOR_TYPE_3, (void*)(&sensorMsgThree), sizeof(SensorDataType3)) != EXIT_SUCCESS){
-    	return EXIT_FAILURE;
-    }
-    if (send_msg(coidFour, SENSOR_TYPE_4, (void*)(&sensorMsgFour), sizeof(SensorDataType4)) != EXIT_SUCCESS){
-    	return EXIT_FAILURE;
+    while(1){
+
     }
 
     return EXIT_SUCCESS;
@@ -87,4 +79,82 @@ int send_msg(int coid, int iSensorType, void* pSensorData, size_t uSensorDataSiz
            auvResp.status);
 
 	return EXIT_SUCCESS;
+}
+
+void sensor_wrapper_one() {
+    /* 2. Open a connection to "SensorServer_X" (the channel for sensor type X). */
+	int coid = name_open("SensorServer_1", 0);
+	if (coid == -1) {
+		perror("name_open");
+		return;
+	}
+
+	SensorDataType1 sensorMsg = { 0 };
+	while (1) {
+
+		if (send_msg(coid, SENSOR_TYPE_1, (void*)(&sensorMsg), sizeof(SensorDataType1)) != EXIT_SUCCESS){
+			perror("[sensor_wrapper_one] Could not send message.");
+		}
+		sleep(10);
+	}
+}
+void sensor_wrapper_two() {
+	int coid = name_open("SensorServer_2", 0);
+	if (coid == -1) {
+		perror("name_open");
+		return;
+	}
+
+	SensorDataType2 sensorMsg = { 0 };
+	while (1) {
+		sensorMsg.x_vel += add_noise(-1, 1);
+		sensorMsg.y_vel += add_noise(-1, 1);
+		sensorMsg.z_vel += add_noise(-0.1, 0.1);
+		if (send_msg(coid, SENSOR_TYPE_2, (void*)(&sensorMsg), sizeof(SensorDataType2)) != EXIT_SUCCESS){
+			perror("[sensor_wrapper_two] Could not send message.");
+		}
+		sleep(10);
+	}
+}
+void sensor_wrapper_three() {
+	int coid = name_open("SensorServer_3", 0);
+	if (coid == -1) {
+		perror("name_open");
+		return;
+	}
+
+	SensorDataType3 sensorMsg = { 0 };
+	while (1) {
+		sensorMsg.x_accel += add_noise(-0.1, 0.1);
+		sensorMsg.y_accel += add_noise(-0.1, 0.1);
+		sensorMsg.z_accel += add_noise(-0.1, 0.1);
+		if (send_msg(coid, SENSOR_TYPE_3, (void*)(&sensorMsg), sizeof(SensorDataType3)) != EXIT_SUCCESS){
+			perror("[sensor_wrapper_three] Could not send message.");
+		}
+		sleep(10);
+	}
+}
+void sensor_wrapper_four() {
+	int coid = name_open("SensorServer_4", 0);
+	if (coid == -1) {
+		perror("name_open");
+		return;
+	}
+
+	SensorDataType4 sensorMsg = { 0 };
+	while (1) {
+		sensorMsg.x_angle += add_noise(-0.1, 0.1);
+		sensorMsg.y_angle += add_noise(-0.1, 0.1);
+		sensorMsg.z_angle += add_noise(-0.1, 0.1);
+		if (send_msg(coid, SENSOR_TYPE_4, (void*)(&sensorMsg), sizeof(SensorDataType4)) != EXIT_SUCCESS){
+			perror("[sensor_wrapper_four] Could not send message.");
+		}
+		sleep(10);
+	}
+}
+
+double add_noise(double min, double max) {
+    double range = (max - min);
+    double div = RAND_MAX / range;
+    return min + (rand() / div);
 }

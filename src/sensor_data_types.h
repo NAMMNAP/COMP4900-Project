@@ -22,21 +22,21 @@ typedef struct {
 } SensorDataType1;
 
 typedef struct {
-    float x_vel;
-    float y_vel;
-    float z_vel;
+	double x_vel;
+    double y_vel;
+    double z_vel;
 } SensorDataType2;
 
 typedef struct {
-    float x_accel;
-    float y_accel;
-    float z_accel;
+	double x_accel;
+    double y_accel;
+    double z_accel;
 } SensorDataType3;
 
 typedef struct {
-    float x_angle;
-    float y_angle;
-    float z_angle;
+	double x_angle;
+	double y_angle;
+	double z_angle;
 } SensorDataType4;
 
 

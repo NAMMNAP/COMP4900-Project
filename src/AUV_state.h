@@ -10,13 +10,11 @@ typedef struct {
 
     // Vector measurements
     // x, y, z axis
-    float velocity[3];
-    float accel[3];
-    float angle[3]; // Yaw, pitch, roll
+    double velocity[3];
+    double accel[3];
+    double angle[3];
 
-    float x;
-    float y;
-    float z;
+    double position[3];
 
     // Mutex to synchronize access if multiple threads modify this.
     pthread_mutex_t mutex;
