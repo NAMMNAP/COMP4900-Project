@@ -21,4 +21,7 @@ typedef struct {
     int status;       // 0 for OK, non-zero for errors, or anything you want
 } AUVResponseThread;
 
+#define INS_FREQUENCY	15
+#define SENSOR_FREQUNCY 10
+
 #endif // COMM_MODULE_H

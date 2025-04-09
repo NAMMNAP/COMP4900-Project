@@ -15,6 +15,8 @@ typedef struct {
     double angle[3];
 
     double position[3];
+    double longitude;
+    double latitude;
 
     // Mutex to synchronize access if multiple threads modify this.
     pthread_mutex_t mutex;

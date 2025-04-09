@@ -91,11 +91,13 @@ void sensor_wrapper_one() {
 
 	SensorDataType1 sensorMsg = { 0 };
 	while (1) {
-
+		sensorMsg.depth = add_noise(100, 101);
+		sensorMsg.temperature = add_noise(19.5, 20);
+		sensorMsg.pressure += add_noise(19.8, 20);
 		if (send_msg(coid, SENSOR_TYPE_1, (void*)(&sensorMsg), sizeof(SensorDataType1)) != EXIT_SUCCESS){
 			perror("[sensor_wrapper_one] Could not send message.");
 		}
-		sleep(10);
+		sleep(SENSOR_FREQUNCY);
 	}
 }
 void sensor_wrapper_two() {
@@ -107,13 +109,13 @@ void sensor_wrapper_two() {
 
 	SensorDataType2 sensorMsg = { 0 };
 	while (1) {
-		sensorMsg.x_vel += add_noise(-1, 1);
+		sensorMsg.x_vel += add_noise(0, 1);
 		sensorMsg.y_vel += add_noise(-1, 1);
 		sensorMsg.z_vel += add_noise(-0.1, 0.1);
 		if (send_msg(coid, SENSOR_TYPE_2, (void*)(&sensorMsg), sizeof(SensorDataType2)) != EXIT_SUCCESS){
 			perror("[sensor_wrapper_two] Could not send message.");
 		}
-		sleep(10);
+		sleep(SENSOR_FREQUNCY);
 	}
 }
 void sensor_wrapper_three() {
@@ -127,11 +129,11 @@ void sensor_wrapper_three() {
 	while (1) {
 		sensorMsg.x_accel += add_noise(-0.1, 0.1);
 		sensorMsg.y_accel += add_noise(-0.1, 0.1);
-		sensorMsg.z_accel += add_noise(-0.1, 0.1);
+		sensorMsg.z_accel += add_noise(-0.01, 0.01);
 		if (send_msg(coid, SENSOR_TYPE_3, (void*)(&sensorMsg), sizeof(SensorDataType3)) != EXIT_SUCCESS){
 			perror("[sensor_wrapper_three] Could not send message.");
 		}
-		sleep(10);
+		sleep(SENSOR_FREQUNCY);
 	}
 }
 void sensor_wrapper_four() {
@@ -149,7 +151,7 @@ void sensor_wrapper_four() {
 		if (send_msg(coid, SENSOR_TYPE_4, (void*)(&sensorMsg), sizeof(SensorDataType4)) != EXIT_SUCCESS){
 			perror("[sensor_wrapper_four] Could not send message.");
 		}
-		sleep(10);
+		sleep(SENSOR_FREQUNCY);
 	}
 }
 

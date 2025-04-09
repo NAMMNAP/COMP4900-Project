@@ -6,8 +6,6 @@
 #include "sensor_data_types.h"
 #include "AUV_state.h"
 
-#define INS_FREQUENCY	15
-
 typedef void (*SensorHandler)(const void *data);
 
 typedef struct {
